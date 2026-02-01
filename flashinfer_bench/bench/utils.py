@@ -105,7 +105,7 @@ def compute_error_stats(
     required_matched_ratio = (
         cfg.required_matched_ratio if cfg.required_matched_ratio is not None else 1.0
     )
-    exceeds_tol_mask = (abs_error > cfg.atol) & (rel_error > cfg.rtol)
+    exceeds_tol_mask = ~torch.isclose(x, y, atol=cfg.atol, rtol=cfg.rtol)
     exceeds_count = float(exceeds_tol_mask.sum().item())
     matched_ratio = 1.0 - (exceeds_count / float(total_elements))
     matched_ratio = max(0.0, min(1.0, matched_ratio))
